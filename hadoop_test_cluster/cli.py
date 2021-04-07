@@ -240,6 +240,7 @@ def htcluster_exec(user, service, cmd=None):
         command.extend(["-T"])
     command.extend(['/root/run_command.sh'])
     command.extend(cmd)
+    print("Running command '%s' on cluster." % cmd)
     dispatch_and_exit(command, env)
 
 
