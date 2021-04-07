@@ -237,10 +237,10 @@ def htcluster_login(user, service):
 def htcluster_exec(user, service, cmd=None):
     env = dict(HADOOP_TESTING_IMAGE='jcrist/hadoop-testing-cdh5')
     command = ['docker-compose', '-f', COMPOSE_FILE,
-               'exec', '-u', user, service,]
+               'exec', '-u', user,]
     if COMPOSE_DISABLE_TTY:
         command.extend(["-T"])
-    command.extend(['/root/run_command.sh'])
+    command.extend([service, '/root/run_command.sh'])
     command.extend(cmd)
     print("Running command '%s' on cluster." % cmd)
     dispatch_and_exit(command, env)
