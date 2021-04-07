@@ -30,7 +30,9 @@ services:
 def dispatch_and_exit(command, env=None):
     environ = dict(os.environ)
     environ.update(env)
-    proc = subprocess.Popen(' '.join(command), env=environ, shell=True)
+    command = ' '.join(command)
+    print("DEBUG Running command %s" %  command)
+    proc = subprocess.Popen(command, env=environ, shell=True)
     sys.exit(proc.wait())
 
 
