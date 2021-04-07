@@ -122,6 +122,7 @@ def map_directories(directories):
         handle, filename = tempfile.mkstemp('.json')
 
         with os.fdopen(handle, 'w') as fil:
+            print("DEBUG %s" % overlay)
             json.dump(overlay, fil)
 
         try:
