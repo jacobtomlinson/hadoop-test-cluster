@@ -15,6 +15,7 @@ from . import __version__
 _this_dir = os.path.abspath(os.path.dirname(os.path.relpath(__file__)))
 COMPOSE_FILE = os.path.join(_this_dir, 'docker-compose.yaml')
 KRB5_CONF = os.path.join(_this_dir, 'krb5.conf')
+COMPOSE_DISABLE_TTY = os.environ.get("COMPOSE_DISABLE_TTY", False)
 
 
 MAP_DIRECTORY_TEMPLATE = """
@@ -221,8 +222,10 @@ def htcluster_startup(image, config, mount=()):
 def htcluster_login(user, service):
     env = dict(HADOOP_TESTING_IMAGE='jcrist/hadoop-testing-cdh5')
     command = ['docker-compose', '-f', COMPOSE_FILE,
-               'exec', '-u', user, service,
-               'bash', '--init-file', '/root/init-shell.sh']
+               'exec', '-u', user, service,]
+    if COMPOSE_DISABLE_TTY:
+        command.extend(["-T"])
+    command.extend(['bash', '--init-file', '/root/init-shell.sh'])
     dispatch_and_exit(command, env)
 
 
@@ -232,8 +235,10 @@ def htcluster_login(user, service):
 def htcluster_exec(user, service, cmd=None):
     env = dict(HADOOP_TESTING_IMAGE='jcrist/hadoop-testing-cdh5')
     command = ['docker-compose', '-f', COMPOSE_FILE,
-               'exec', '-u', user, service,
-               '/root/run_command.sh']
+               'exec', '-u', user, service,]
+    if COMPOSE_DISABLE_TTY:
+        command.extend(["-T"])
+    command.extend(['/root/run_command.sh'])
     command.extend(cmd)
     dispatch_and_exit(command, env)
 
